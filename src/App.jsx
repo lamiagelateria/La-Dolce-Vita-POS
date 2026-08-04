@@ -39,6 +39,15 @@ const [nomeAsporto,setNomeAsporto]=useState("");
 const [oraRitiro,setOraRitiro]=useState("");
 
 const [statoAsporto,setStatoAsporto]=useState(statiAsporto[0]);
+const [ordine,setOrdine]=useState([]);
+
+const [ordineAsporto,setOrdineAsporto]=useState([]);
+
+const [categoriaAsporto,setCategoriaAsporto]=useState("pizze");
+
+const [extra,setExtra]=useState([]);
+
+const [nota,setNota]=useState("");
 
 
 
