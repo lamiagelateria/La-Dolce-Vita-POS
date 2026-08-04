@@ -13,7 +13,7 @@ zona:zone[i%3],
 stato:"libero",
 ordine:[],
 totale:0
-
+persone:0
 }));
 
 };
