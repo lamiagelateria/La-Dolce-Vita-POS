@@ -21,6 +21,7 @@ const [persone,setPersone]=useState(0);
 const [cliente,setCliente]=useState("");
 
 
+
 const [extra,setExtra]=useState([]);
 
 const [nota,setNota]=useState("");
@@ -37,7 +38,7 @@ const [pagamento,setPagamento]=useState("");
 
 
 
-// ASporto
+// ASPORTO
 
 const [asporto,setAsporto]=useState(false);
 
@@ -50,6 +51,8 @@ const [ordineAsporto,setOrdineAsporto]=useState([]);
 const [categoriaAsporto,setCategoriaAsporto]=useState("pizze");
 
 const [statoAsporto,setStatoAsporto]=useState(statiAsporto[0]);
+
+const [asporti,setAsporti]=useState([]);
 
 
 
@@ -84,7 +87,6 @@ cottura
 }
 
 ]);
-
 
 setExtra([]);
 
@@ -129,9 +131,11 @@ return ordineAsporto
 .toFixed(2);
 
 }
-return (
 
-<div style={{
+
+
+return (
+  <div style={{
 background:"#111",
 minHeight:"100vh",
 color:"white",
@@ -148,6 +152,71 @@ borderRadius:"10px"
 }}>
 🍕 La Dolce Vita POS
 </h1>
+
+
+
+<h2>
+📦 Asporti in corso
+</h2>
+
+
+{asporti.map((a,i)=>
+
+<div key={i} style={{
+background:"#222",
+padding:"15px",
+margin:"10px",
+borderRadius:"10px"
+}}>
+
+<h3>
+👤 {a.nome}
+</h3>
+
+<p>
+🕒 {a.ora}
+</p>
+
+<p>
+📌 {a.stato}
+</p>
+
+
+{a.ordine.map((o,x)=>
+
+<p key={x}>
+{o.nome} €{o.prezzo}
+</p>
+
+)}
+
+
+<h3>
+Totale €{a.totale.toFixed(2)}
+</h3>
+
+
+<button
+
+onClick={()=>{
+
+setAsporti(
+asporti.filter((_,index)=>index!==i)
+);
+
+}}
+
+>
+
+💳 Pagato / Chiudi
+
+</button>
+
+
+</div>
+
+)}
+
 
 
 
@@ -197,7 +266,9 @@ border:"2px solid white"
 
 <br/>
 
-<small>{t.zona}</small>
+<small>
+{t.zona}
+</small>
 
 <br/>
 
@@ -229,10 +300,7 @@ padding:"15px"
 </div>
 
 }
-
-
-
-{tavolo &&
+ {tavolo &&
 
 <div>
 
@@ -242,7 +310,9 @@ padding:"15px"
 </h2>
 
 
-<h3>{tavolo.zona}</h3>
+<h3>
+{tavolo.zona}
+</h3>
 
 
 
@@ -272,11 +342,11 @@ placeholder="Nome cliente"
 
 type="number"
 
+min="1"
+
 value={persone}
 
 onChange={(e)=>setPersone(e.target.value)}
-
-min="1"
 
 />
 
@@ -338,9 +408,12 @@ padding:"12px"
 
 )}
 
-</div>  
+</div>
+
+
+
 <h3>
-➕ Extra pizza
+➕ Extra
 </h3>
 
 
@@ -353,8 +426,7 @@ key={e.nome}
 onClick={()=>setExtra([...extra,e])}
 
 style={{
-margin:"5px",
-padding:"8px"
+margin:"5px"
 }}
 
 >
@@ -438,9 +510,7 @@ placeholder="Note cliente"
 {ordine.map((o,i)=>
 
 <p key={i}>
-
 🍕 {o.nome} €{o.prezzo}
-
 </p>
 
 )}
@@ -450,7 +520,6 @@ placeholder="Note cliente"
 <h2>
 Totale €{totale()}
 </h2>
-
 
 
 <button
@@ -475,14 +544,14 @@ marginLeft:"10px"
 
 >
 
-⬅ Torna tavoli
+⬅ Tavoli
 
 </button>
 
 
 </div>
 
-}  
+}   
 {cassa &&
 
 <div style={{
@@ -593,7 +662,7 @@ borderRadius:"15px"
 
 
 <h2>
-📦 Asporto
+📦 Nuovo Asporto
 </h2>
 
 
@@ -655,7 +724,6 @@ onChange={(e)=>setCategoriaAsporto(e.target.value)}
 
 <div>
 
-
 {menu[categoriaAsporto].map(p=>
 
 <button
@@ -686,16 +754,14 @@ padding:"12px"
 
 
 <h3>
-📋 Ordine asporto
+📋 Ordine
 </h3>
 
 
 {ordineAsporto.map((o,i)=>
 
 <p key={i}>
-
 {o.nome} €{o.prezzo}
-
 </p>
 
 )}
@@ -733,24 +799,41 @@ onChange={(e)=>setStatoAsporto(e.target.value)}
 
 
 
+<br/><br/>
+
+
 <button
 
 onClick={()=>{
+
+setAsporti([
+
+...asporti,
+
+{
+nome:nomeAsporto,
+ora:oraRitiro,
+ordine:ordineAsporto,
+stato:statoAsporto,
+totale:Number(totaleAsporto())
+}
+
+]);
+
 
 setAsporto(false);
 
 setOrdineAsporto([]);
 
-}}
+setNomeAsporto("");
 
-style={{
-marginTop:"15px",
-padding:"12px"
+setOraRitiro("");
+
 }}
 
 >
 
-✅ Salva asporto
+✅ Salva Asporto
 
 </button>
 
@@ -765,4 +848,4 @@ padding:"12px"
 
 );
 
-}  
+}    
