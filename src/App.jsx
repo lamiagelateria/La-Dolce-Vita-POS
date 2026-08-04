@@ -12,7 +12,7 @@ const [tavolo,setTavolo]=useState(null);
 const [categoria,setCategoria]=useState("pizze");
 
 const [ordine,setOrdine]=useState([]);
-
+const [persone,setPersone]=useState(0);
 const [extra,setExtra]=useState([]);
 
 const [nota,setNota]=useState("");
