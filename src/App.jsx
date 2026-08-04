@@ -12,7 +12,7 @@ const [tavolo,setTavolo]=useState(null);
 const [categoria,setCategoria]=useState("pizze");
 
 const [ordine,setOrdine]=useState([]);
-const [persone,setPersone]=useState(0);
+
 const [extra,setExtra]=useState([]);
 
 const [nota,setNota]=useState("");
@@ -21,32 +21,47 @@ const [impasto,setImpasto]=useState("Classico");
 
 const [cottura,setCottura]=useState("Normale");
 
+
+const [persone,setPersone]=useState(0);
+
+const [cliente,setCliente]=useState("");
+
+
 const [cassa,setCassa]=useState(false);
 
 const [pagamento,setPagamento]=useState("");
 
+
 const [asporto,setAsporto]=useState(false);
 
-const [cliente,setCliente]=useState("");
+const [nomeAsporto,setNomeAsporto]=useState("");
 
 const [oraRitiro,setOraRitiro]=useState("");
 
 const [statoAsporto,setStatoAsporto]=useState(statiAsporto[0]);
 
 
+
 function apriTavolo(t){
 
 setTavolo(t);
 
-setOrdine(t.ordine);
+setOrdine(t.ordine || []);
+
+setPersone(t.persone || 0);
+
+setCliente(t.cliente || "");
 
 }
+
 
 
 function aggiungiProdotto(p){
 
 setOrdine([
+
 ...ordine,
+
 {
 ...p,
 extra,
@@ -54,13 +69,16 @@ nota,
 impasto,
 cottura
 }
+
 ]);
+
 
 setExtra([]);
 
 setNota("");
 
 }
+
 
 
 function totale(){
@@ -91,12 +109,12 @@ borderRadius:"10px"
 }}>
 🍕 La Dolce Vita POS
 </h1>
-  {!tavolo &&
+{!tavolo &&
 
 <div>
 
 <h2>
-🪑 Sala Ristorante
+🪑 Tavoli Sala
 </h2>
 
 
@@ -134,6 +152,11 @@ fontWeight:"bold"
 {t.zona}
 </small>
 
+<br/>
+
+<small>
+👥 {t.persone || 0}
+</small>
 
 </button>
 
@@ -147,7 +170,6 @@ fontWeight:"bold"
 
 
 
-
 {tavolo &&
 
 <div>
@@ -157,20 +179,61 @@ fontWeight:"bold"
 🪑 Tavolo {tavolo.numero}
 </h2>
 
+
 <h3>
 {tavolo.zona}
 </h3>
+
+
 <h3>
-👥 Persone al tavolo
+👤 Nome prenotazione
 </h3>
 
+
 <input
-type="number"
-min="1"
-value={persone}
-onChange={(e)=>setPersone(e.target.value)}
-placeholder="Numero persone"
+
+value={cliente}
+
+onChange={(e)=>setCliente(e.target.value)}
+
+placeholder="Nome cliente"
+
+style={{
+padding:"8px"
+}}
+
 />
+
+
+
+<h3>
+👥 Persone
+</h3>
+
+
+<input
+
+type="number"
+
+min="1"
+
+value={persone}
+
+onChange={(e)=>setPersone(e.target.value)}
+
+placeholder="Numero persone"
+
+style={{
+padding:"8px"
+}}
+
+/>
+
+
+
+<h3>
+📋 Menu
+</h3>
 
 
 <select
@@ -181,12 +244,19 @@ onChange={(e)=>setCategoria(e.target.value)}
 
 >
 
+
 <option value="pizze">🍕 Pizze</option>
+
 <option value="bevande">🥤 Bevande</option>
+
 <option value="caffetteria">☕ Caffè</option>
+
 <option value="dolci">🍰 Dolci</option>
+
 <option value="gelati">🍦 Gelati</option>
+
 <option value="bimbi">🧒 Bimbi</option>
+
 
 </select>
 
@@ -223,10 +293,7 @@ borderRadius:"8px"
 
 )}
 
-</div>
-
-
-
+</div>  
 <h3>
 ➕ Extra
 </h3>
@@ -260,12 +327,17 @@ margin:"5px"
 
 
 <select
+
 value={impasto}
+
 onChange={(e)=>setImpasto(e.target.value)}
+
 >
 
 <option>Classico</option>
+
 <option>Integrale</option>
+
 <option>Senza glutine</option>
 
 </select>
@@ -278,12 +350,17 @@ onChange={(e)=>setImpasto(e.target.value)}
 
 
 <select
+
 value={cottura}
+
 onChange={(e)=>setCottura(e.target.value)}
+
 >
 
 <option>Normale</option>
+
 <option>Ben cotta</option>
+
 <option>Poco cotta</option>
 
 </select>
@@ -291,7 +368,7 @@ onChange={(e)=>setCottura(e.target.value)}
 
 
 <h3>
-📝 Nota
+📝 Note
 </h3>
 
 
@@ -306,6 +383,7 @@ placeholder="Note cliente"
 />
 
 
+
 <h2>
 Ordine
 </h2>
@@ -314,52 +392,72 @@ Ordine
 {ordine.map((o,i)=>
 
 <p key={i}>
-{o.nome} €{o.prezzo}
+
+🍕 {o.nome} €{o.prezzo}
+
 </p>
 
 )}
 
 
+
 <h2>
-Totale €{totale()}
+Totale: €{totale()}
 </h2>
 
 
 
 <button
+
 onClick={()=>setCassa(true)}
+
 >
+
 💳 Cassa
+
 </button>
 
 
+
 <button
+
 onClick={()=>setTavolo(null)}
-style={{marginLeft:"10px"}}
+
+style={{
+marginLeft:"10px"
+}}
+
 >
+
 ⬅ Tavoli
+
 </button>
 
 
 </div>
 
 }
+
+
+
 {cassa &&
 
 <div style={{
 background:"#222",
 padding:"20px",
-marginTop:"20px",
-borderRadius:"15px"
+marginTop:"20px"
 }}>
+
 
 <h2>
 💳 Cassa
 </h2>
 
+
 <h3>
-Totale: €{totale()}
+Totale €{totale()}
 </h3>
+
 
 
 {pagamenti.map(p=>
@@ -387,13 +485,6 @@ padding:"10px"
 
 {pagamento &&
 
-<div>
-
-<p>
-Pagamento: {pagamento}
-</p>
-
-
 <button
 
 onClick={()=>{
@@ -410,7 +501,9 @@ t.numero===tavolo.numero
 ...t,
 stato:"libero",
 ordine:[],
-totale:0
+totale:0,
+persone:0,
+cliente:""
 }
 
 :t
@@ -421,10 +514,12 @@ totale:0
 
 
 setTavolo(null);
-setOrdine([]);
-setPagamento("");
-setCassa(false);
 
+setOrdine([]);
+
+setPagamento("");
+
+setCassa(false);
 
 }}
 
@@ -434,15 +529,12 @@ setCassa(false);
 
 </button>
 
+}
+
 
 </div>
 
 }
-
-</div>
-
-}
-
 
 
 
@@ -450,8 +542,7 @@ setCassa(false);
 
 <div style={{
 background:"#333",
-padding:"20px",
-marginTop:"20px"
+padding:"20px"
 }}>
 
 
@@ -464,9 +555,9 @@ marginTop:"20px"
 
 placeholder="Nome cliente"
 
-value={cliente}
+value={nomeAsporto}
 
-onChange={(e)=>setCliente(e.target.value)}
+onChange={(e)=>setNomeAsporto(e.target.value)}
 
 />
 
@@ -487,7 +578,7 @@ onChange={(e)=>setOraRitiro(e.target.value)}
 
 
 <h3>
-Stato ordine
+Stato
 </h3>
 
 
@@ -516,7 +607,6 @@ onChange={(e)=>setStatoAsporto(e.target.value)}
 
 
 
-
 <button
 
 onClick={()=>setAsporto(true)}
@@ -531,7 +621,6 @@ padding:"12px"
 📦 Nuovo Asporto
 
 </button>
-
 
 
 </div>
