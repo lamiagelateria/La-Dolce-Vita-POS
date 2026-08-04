@@ -173,11 +173,11 @@ modificabile:true
 {
 nome:"Burrata e Crudo",
 prezzo:13,
-ingredienti:["Pomodoro","Burrata","Prosciutto crudo"],
+ingredienti:["Pomodoro","Burrata","Prosciutto crudo"]
 modificabile:true
-}
+},
 
- {
+{
 nome:"Tartufata",
 prezzo:15,
 ingredienti:["Fiordilatte","Crema tartufo","Funghi porcini"],
