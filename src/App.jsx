@@ -44,6 +44,67 @@ const pizze = [
 {nome:"Bianca Quattro Formaggi", prezzo:11},
 {nome:"Bianca Salmone", prezzo:13}
 ];
+{pizzaScelta &&
+
+<div style={{
+marginTop:"20px",
+background:"#222",
+padding:"20px",
+borderRadius:"15px"
+}}>
+
+<h2>
+🍕 {pizzaScelta.nome}
+</h2>
+
+<h3>
+Extra ingredienti
+</h3>
+
+{ingredienti.map(i=>(
+
+<button
+key={i}
+onClick={()=>setExtra([...extra,i])}
+style={{
+margin:"5px",
+padding:"10px"
+}}
+>
+➕ {i}
+</button>
+
+))}
+
+
+<h3>Note</h3>
+
+<textarea
+value={nota}
+onChange={(e)=>setNota(e.target.value)}
+placeholder="es. ben cotta, poco sale..."
+/>
+
+
+<br/><br/>
+
+<button
+onClick={()=>{
+aggiungiPizza({
+...pizzaScelta,
+extra,
+nota
+});
+setPizzaScelta(null);
+}}
+>
+✅ Aggiungi all'ordine
+</button>
+
+
+</div>
+
+}
 const ingredienti = [
 "🍅 Pomodoro",
 "🧀 Mozzarella",
@@ -67,7 +128,9 @@ ordine:[]
 );
 
 const [tavoloAperto,setTavoloAperto]=useState(null);
-
+const [pizzaScelta,setPizzaScelta]=useState(null);
+const [nota,setNota]=useState("");
+const [extra,setExtra]=useState([]);
 
 function apriTavolo(t){
 setTavoloAperto(t);
@@ -185,7 +248,11 @@ gap:"10px"
 
 <button
 key={p.nome}
-onClick={()=>aggiungiPizza(p)}
+onClick={()=>{
+ setPizzaScelta(p);
+ setNota("");
+ setExtra([]);
+}}
 style={{
 padding:"15px"
 }}
