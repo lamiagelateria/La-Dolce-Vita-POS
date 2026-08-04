@@ -4,17 +4,25 @@ const pizze = [
 {nome:"Margherita", prezzo:7},
 {nome:"Marinara", prezzo:6},
 {nome:"Napoli", prezzo:8},
-{nome:"Romana", prezzo:8},
 {nome:"Prosciutto e Funghi", prezzo:9},
 {nome:"Capricciosa", prezzo:10},
-{nome:"Quattro Formaggi", prezzo:10},
 {nome:"Diavola", prezzo:9},
-{nome:"Wurstel e Patatine", prezzo:9},
+{nome:"Quattro Formaggi", prezzo:10},
 {nome:"Bufalina", prezzo:11},
 {nome:"Mortadella e Pistacchio", prezzo:12},
 {nome:"La Dolce Vita Special", prezzo:14},
-{nome:"Tartufata", prezzo:15},
-{nome:"Bianca Salmone", prezzo:13}
+{nome:"Tartufata", prezzo:15}
+];
+
+
+const extraIngredienti=[
+{nome:"Funghi",prezzo:1},
+{nome:"Prosciutto",prezzo:2},
+{nome:"Olive",prezzo:1},
+{nome:"Patatine",prezzo:1.5},
+{nome:"Mozzarella extra",prezzo:2},
+{nome:"Burrata",prezzo:3},
+{nome:"Pistacchio",prezzo:2.5}
 ];
 
 
@@ -29,14 +37,31 @@ ordine:[]
 );
 
 const [tavoloAperto,setTavoloAperto]=useState(null);
+const [pizzaScelta,setPizzaScelta]=useState(null);
+const [extra,setExtra]=useState([]);
+const [nota,setNota]=useState("");
 
 
-function aggiungiPizza(pizza){
+function aggiungiPizza(){
+
+const prezzoFinale=
+pizzaScelta.prezzo+
+extra.reduce((a,b)=>a+b.prezzo,0);
+
+
+const pizza={
+...pizzaScelta,
+extra,
+nota,
+prezzo:prezzoFinale
+};
+
 
 const nuovoOrdine=[
 ...tavoloAperto.ordine,
 pizza
 ];
+
 
 setTavoli(
 tavoli.map(t=>
@@ -58,6 +83,11 @@ occupato:true,
 ordine:nuovoOrdine
 });
 
+
+setPizzaScelta(null);
+setExtra([]);
+setNota("");
+
 }
 
 
@@ -76,27 +106,18 @@ return (
 background:"#111",
 minHeight:"100vh",
 color:"white",
-fontFamily:"Arial"
+padding:"20px"
 }}>
 
 
-<h1 style={{
-background:"#b71c1c",
-padding:"20px",
-textAlign:"center"
-}}>
+<h1>
 🍕 La Dolce Vita POS
 </h1>
 
 
 {!tavoloAperto &&
 
-<div style={{
-display:"grid",
-gridTemplateColumns:"repeat(6,1fr)",
-gap:"10px",
-padding:"20px"
-}}>
+<div>
 
 {tavoli.map(t=>
 
@@ -104,7 +125,8 @@ padding:"20px"
 key={t.numero}
 onClick={()=>setTavoloAperto(t)}
 style={{
-height:"70px",
+margin:"5px",
+padding:"15px",
 background:t.occupato?"red":"green",
 color:"white"
 }}
@@ -122,24 +144,23 @@ Tavolo {t.numero}
 
 {tavoloAperto &&
 
-<div style={{padding:"20px"}}>
+<div>
 
 <h2>
 🪑 Tavolo {tavoloAperto.numero}
 </h2>
 
 
-<h3>🍕 Pizze</h3>
-
+<h3>🍕 Scegli pizza</h3>
 
 {pizze.map(p=>
 
 <button
 key={p.nome}
-onClick={()=>aggiungiPizza(p)}
+onClick={()=>setPizzaScelta(p)}
 style={{
 margin:"5px",
-padding:"12px"
+padding:"10px"
 }}
 >
 {p.nome}
@@ -151,8 +172,62 @@ padding:"12px"
 
 
 
-<h2>Ordine</h2>
+{pizzaScelta &&
 
+<div style={{
+background:"#222",
+padding:"20px",
+marginTop:"20px"
+}}>
+
+<h2>
+🍕 {pizzaScelta.nome}
+</h2>
+
+
+<h3>➕ Aggiungi ingredienti</h3>
+
+{extraIngredienti.map(e=>
+
+<button
+key={e.nome}
+onClick={()=>setExtra([...extra,e])}
+style={{
+margin:"5px",
+padding:"10px"
+}}
+>
+{e.nome} +€{e.prezzo}
+</button>
+
+)}
+
+
+<h3>📝 Note</h3>
+
+<textarea
+value={nota}
+onChange={(e)=>setNota(e.target.value)}
+placeholder="es. ben cotta, senza sale..."
+/>
+
+
+<br/><br/>
+
+<button
+onClick={aggiungiPizza}
+>
+✅ Aggiungi al tavolo
+</button>
+
+
+</div>
+
+}
+
+
+
+<h2>Ordine</h2>
 
 {tavoloAperto.ordine.map((p,i)=>
 
@@ -164,14 +239,14 @@ padding:"12px"
 
 
 <h2>
-Totale: €{totale()}
+Totale €{totale()}
 </h2>
 
 
 <button
 onClick={()=>setTavoloAperto(null)}
 >
-⬅ Torna ai tavoli
+⬅ Tavoli
 </button>
 
 
