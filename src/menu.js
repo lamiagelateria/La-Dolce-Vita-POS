@@ -23,9 +23,26 @@ extra:[
 ],
 
 bevande:[
-{nome:"Acqua",prezzo:1.5},
+
+{nome:"Acqua Naturale",prezzo:1.5},
+{nome:"Acqua Frizzante",prezzo:1.5},
+
 {nome:"Coca Cola",prezzo:3},
-{nome:"Birra",prezzo:4}
+{nome:"Coca Cola Zero",prezzo:3},
+{nome:"Fanta",prezzo:3},
+{nome:"Sprite",prezzo:3},
+
+{nome:"Birra Moretti",prezzo:4},
+{nome:"Heineken",prezzo:4},
+{nome:"Birra alla spina Piccola",prezzo:3.5},
+{nome:"Birra alla spina Media",prezzo:5},
+
+{nome:"Vino Rosso Calice",prezzo:4},
+{nome:"Vino Bianco Calice",prezzo:4},
+
+{nome:"Amaro",prezzo:3},
+{nome:"Grappa",prezzo:3.5}
+
 ],
 
 caffetteria:[
