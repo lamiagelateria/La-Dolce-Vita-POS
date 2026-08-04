@@ -160,7 +160,17 @@ fontWeight:"bold"
 <h3>
 {tavolo.zona}
 </h3>
+<h3>
+👥 Persone al tavolo
+</h3>
 
+<input
+type="number"
+min="1"
+value={persone}
+onChange={(e)=>setPersone(e.target.value)}
+placeholder="Numero persone"
+/>
 
 
 <select
