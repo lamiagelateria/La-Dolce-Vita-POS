@@ -177,7 +177,6 @@ ingredienti:["Pomodoro","Burrata","Prosciutto crudo"],
 modificabile:true
 }
 
-],
  {
 nome:"Tartufata",
 prezzo:15,
