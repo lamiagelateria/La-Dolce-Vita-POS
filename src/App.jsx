@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { menu } from "./menu";
 import { creaTavoli, pagamenti, statiAsporto } from "./dati";
 
@@ -6,7 +6,15 @@ import { creaTavoli, pagamenti, statiAsporto } from "./dati";
 export default function App(){
 
 
-const [tavoli,setTavoli]=useState(creaTavoli());
+const [tavoli,setTavoli]=useState(
+JSON.parse(localStorage.getItem("tavoli")) || creaTavoli()
+);
+
+
+const [asporti,setAsporti]=useState(
+JSON.parse(localStorage.getItem("asporti")) || []
+);
+
 
 const [tavolo,setTavolo]=useState(null);
 
@@ -52,8 +60,33 @@ const [categoriaAsporto,setCategoriaAsporto]=useState("pizze");
 
 const [statoAsporto,setStatoAsporto]=useState(statiAsporto[0]);
 
-const [asporti,setAsporti]=useState([]);
 
+
+// CUCINA
+
+const [cucina,setCucina]=useState([]);
+
+
+
+useEffect(()=>{
+
+localStorage.setItem(
+"tavoli",
+JSON.stringify(tavoli)
+);
+
+},[tavoli]);
+
+
+
+useEffect(()=>{
+
+localStorage.setItem(
+"asporti",
+JSON.stringify(asporti)
+);
+
+},[asporti]);
 
 
 
@@ -67,44 +100,6 @@ setOrdine(t.ordine || []);
 setPersone(t.persone || 0);
 
 setCliente(t.cliente || "");
-
-}
-
-
-
-function aggiungiProdotto(p){
-
-setOrdine([
-
-...ordine,
-
-{
-...p,
-extra,
-nota,
-impasto,
-cottura
-}
-
-]);
-
-setExtra([]);
-
-setNota("");
-
-}
-
-
-
-function aggiungiAsporto(p){
-
-setOrdineAsporto([
-
-...ordineAsporto,
-
-p
-
-]);
 
 }
 
@@ -131,17 +126,210 @@ return ordineAsporto
 .toFixed(2);
 
 }
+function aggiungiProdotto(p){
+
+const nuovoOrdine=[
+
+...ordine,
+
+{
+...p,
+extra,
+nota,
+impasto,
+cottura
+}
+
+];
+
+
+setOrdine(nuovoOrdine);
 
 
 
+setTavoli(
+
+tavoli.map(t=>
+
+t.numero===tavolo.numero
+
+?
+
+{
+...t,
+stato:"occupato",
+ordine:nuovoOrdine,
+persone:persone,
+cliente:cliente
+}
+
+:t
+
+)
+
+);
+
+
+
+setCucina([
+
+...cucina,
+
+{
+tipo:"Tavolo",
+numero:tavolo.numero,
+zona:tavolo.zona,
+prodotto:p.nome,
+extra:extra,
+nota:nota,
+impasto:impasto,
+cottura:cottura,
+stato:"Da fare"
+}
+
+]);
+
+
+
+setExtra([]);
+
+setNota("");
+
+}
+
+
+
+
+function aggiungiAsporto(p){
+
+setOrdineAsporto([
+
+...ordineAsporto,
+
+p
+
+]);
+
+}
+
+
+
+
+function salvaAsporto(){
+
+
+const nuovo={
+
+nome:nomeAsporto,
+
+ora:oraRitiro,
+
+ordine:ordineAsporto,
+
+stato:statoAsporto,
+
+totale:Number(totaleAsporto())
+
+};
+
+
+
+setAsporti([
+
+...asporti,
+
+nuovo
+
+]);
+
+
+
+setCucina([
+
+...cucina,
+
+...ordineAsporto.map(o=>({
+
+tipo:"Asporto",
+
+nome:nomeAsporto,
+
+prodotto:o.nome,
+
+nota:"",
+
+impasto:"",
+
+cottura:"",
+
+stato:"Da fare"
+
+}))
+
+]);
+
+
+
+setOrdineAsporto([]);
+
+setNomeAsporto("");
+
+setOraRitiro("");
+
+setAsporto(false);
+
+}
+
+
+
+
+
+function chiudiTavolo(){
+
+
+setTavoli(
+
+tavoli.map(t=>
+
+t.numero===tavolo.numero
+
+?
+
+{
+...t,
+stato:"libero",
+ordine:[],
+totale:0,
+persone:0,
+cliente:""
+}
+
+:t
+
+)
+
+);
+
+
+setTavolo(null);
+
+setOrdine([]);
+
+setPagamento("");
+
+setCassa(false);
+
+}  
 return (
-  <div style={{
+
+<div style={{
 background:"#111",
 minHeight:"100vh",
 color:"white",
 fontFamily:"Arial",
 padding:"20px"
 }}>
+
 
 
 <h1 style={{
@@ -155,8 +343,9 @@ borderRadius:"10px"
 
 
 
+
 <h2>
-📦 Asporti in corso
+📦 Asporti aperti
 </h2>
 
 
@@ -168,6 +357,7 @@ padding:"15px",
 margin:"10px",
 borderRadius:"10px"
 }}>
+
 
 <h3>
 👤 {a.nome}
@@ -182,6 +372,7 @@ borderRadius:"10px"
 </p>
 
 
+
 {a.ordine.map((o,x)=>
 
 <p key={x}>
@@ -191,9 +382,55 @@ borderRadius:"10px"
 )}
 
 
+
 <h3>
 Totale €{a.totale.toFixed(2)}
 </h3>
+
+
+
+<select
+
+value={a.stato}
+
+onChange={(e)=>{
+
+setAsporti(
+
+asporti.map((item,index)=>
+
+index===i
+
+?
+
+{
+...item,
+stato:e.target.value
+}
+
+:item
+
+)
+
+)
+
+}}
+
+>
+
+{statiAsporto.map(s=>
+
+<option key={s}>
+{s}
+</option>
+
+)}
+
+</select>
+
+
+
+<br/><br/>
 
 
 <button
@@ -201,7 +438,9 @@ Totale €{a.totale.toFixed(2)}
 onClick={()=>{
 
 setAsporti(
+
 asporti.filter((_,index)=>index!==i)
+
 );
 
 }}
@@ -213,6 +452,7 @@ asporti.filter((_,index)=>index!==i)
 </button>
 
 
+
 </div>
 
 )}
@@ -220,9 +460,13 @@ asporti.filter((_,index)=>index!==i)
 
 
 
+
+
 {!tavolo && !asporto &&
 
+
 <div>
+
 
 <h2>
 🪑 Tavoli
@@ -262,13 +506,14 @@ border:"2px solid white"
 
 >
 
-🪑 Tavolo {t.numero}
+🪑 {t.numero}
 
 <br/>
 
 <small>
 {t.zona}
 </small>
+
 
 <br/>
 
@@ -279,6 +524,7 @@ border:"2px solid white"
 )}
 
 </div>
+
 
 
 <button
@@ -300,7 +546,7 @@ padding:"15px"
 </div>
 
 }
- {tavolo &&
+{tavolo &&
 
 <div>
 
@@ -317,7 +563,7 @@ padding:"15px"
 
 
 <h3>
-👤 Prenotazione
+👤 Nome prenotazione
 </h3>
 
 
@@ -352,6 +598,7 @@ onChange={(e)=>setPersone(e.target.value)}
 
 
 
+
 <h3>
 🍽️ Menu
 </h3>
@@ -381,7 +628,9 @@ onChange={(e)=>setCategoria(e.target.value)}
 
 
 
+
 <div>
+
 
 {menu[categoria].map(p=>
 
@@ -412,6 +661,7 @@ padding:"12px"
 
 
 
+
 <h3>
 ➕ Extra
 </h3>
@@ -424,10 +674,6 @@ padding:"12px"
 key={e.nome}
 
 onClick={()=>setExtra([...extra,e])}
-
-style={{
-margin:"5px"
-}}
 
 >
 
@@ -486,7 +732,7 @@ onChange={(e)=>setCottura(e.target.value)}
 
 
 <h3>
-📝 Note
+📝 Nota
 </h3>
 
 
@@ -496,7 +742,7 @@ value={nota}
 
 onChange={(e)=>setNota(e.target.value)}
 
-placeholder="Note cliente"
+placeholder="Note cucina"
 
 />
 
@@ -507,19 +753,24 @@ placeholder="Note cliente"
 </h2>
 
 
+
 {ordine.map((o,i)=>
 
 <p key={i}>
-🍕 {o.nome} €{o.prezzo}
+
+{o.nome} €{o.prezzo}
+
 </p>
 
 )}
 
 
 
+
 <h2>
 Totale €{totale()}
 </h2>
+
 
 
 <button
@@ -549,9 +800,10 @@ marginLeft:"10px"
 </button>
 
 
+
 </div>
 
-}   
+}  
 {cassa &&
 
 <div style={{
@@ -563,13 +815,14 @@ borderRadius:"15px"
 
 
 <h2>
-💳 Cassa
+💳 Cassa tavolo
 </h2>
 
 
 <h3>
 Totale €{totale()}
 </h3>
+
 
 
 {pagamenti.map(p=>
@@ -599,41 +852,7 @@ padding:"10px"
 
 <button
 
-onClick={()=>{
-
-setTavoli(
-
-tavoli.map(t=>
-
-t.numero===tavolo.numero
-
-?
-
-{
-...t,
-stato:"libero",
-ordine:[],
-totale:0,
-persone:0,
-cliente:""
-}
-
-:t
-
-)
-
-);
-
-
-setTavolo(null);
-
-setOrdine([]);
-
-setPagamento("");
-
-setCassa(false);
-
-}}
+onClick={chiudiTavolo}
 
 >
 
@@ -666,7 +885,6 @@ borderRadius:"15px"
 </h2>
 
 
-
 <input
 
 placeholder="Nome cliente"
@@ -694,7 +912,7 @@ onChange={(e)=>setOraRitiro(e.target.value)}
 
 
 <h3>
-🍽️ Menu asporto
+🍽️ Menu
 </h3>
 
 
@@ -753,8 +971,9 @@ padding:"12px"
 
 
 
+
 <h3>
-📋 Ordine
+📋 Ordine asporto
 </h3>
 
 
@@ -772,11 +991,6 @@ padding:"12px"
 Totale €{totaleAsporto()}
 </h2>
 
-
-
-<h3>
-Stato ordine
-</h3>
 
 
 <select
@@ -802,34 +1016,10 @@ onChange={(e)=>setStatoAsporto(e.target.value)}
 <br/><br/>
 
 
+
 <button
 
-onClick={()=>{
-
-setAsporti([
-
-...asporti,
-
-{
-nome:nomeAsporto,
-ora:oraRitiro,
-ordine:ordineAsporto,
-stato:statoAsporto,
-totale:Number(totaleAsporto())
-}
-
-]);
-
-
-setAsporto(false);
-
-setOrdineAsporto([]);
-
-setNomeAsporto("");
-
-setOraRitiro("");
-
-}}
+onClick={salvaAsporto}
 
 >
 
@@ -844,8 +1034,91 @@ setOraRitiro("");
 
 
 
+
+<h2>
+👨‍🍳 Cucina
+</h2>
+
+
+
+{cucina.map((c,i)=>
+
+<div key={i} style={{
+background:"#222",
+padding:"10px",
+margin:"10px",
+borderRadius:"10px"
+}}>
+
+
+<h3>
+{c.tipo}
+</h3>
+
+
+<p>
+{c.prodotto}
+</p>
+
+
+<p>
+Impasto: {c.impasto}
+</p>
+
+
+<p>
+Cottura: {c.cottura}
+</p>
+
+
+<p>
+Nota: {c.nota}
+</p>
+
+
+
+<button
+
+onClick={()=>{
+
+setCucina(
+
+cucina.map((x,index)=>
+
+index===i
+
+?
+
+{
+...x,
+stato:"Pronto"
+}
+
+:x
+
+)
+
+)
+
+}}
+
+>
+
+✅ Pronto
+
+</button>
+
+
+
+</div>
+
+)}
+
+
+
+
 </div>
 
 );
 
-}    
+}  
