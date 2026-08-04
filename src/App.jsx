@@ -1,21 +1,48 @@
 import { useState } from "react";
 
 const pizze = [
-  {nome:"Margherita", prezzo:7},
-  {nome:"Marinara", prezzo:6},
-  {nome:"Napoli", prezzo:8},
-  {nome:"Prosciutto", prezzo:8.5},
-  {nome:"Prosciutto e Funghi", prezzo:9},
-  {nome:"Capricciosa", prezzo:10},
-  {nome:"Quattro Stagioni", prezzo:10},
-  {nome:"Quattro Formaggi", prezzo:10},
-  {nome:"Diavola", prezzo:9},
-  {nome:"Vegetariana", prezzo:9},
-  {nome:"Tonno e Cipolla", prezzo:9.5},
-  {nome:"Bufalina", prezzo:11},
-  {nome:"Speck e Brie", prezzo:11},
-  {nome:"Mortadella e Pistacchio", prezzo:12},
-  {nome:"La Dolce Vita Special", prezzo:14}
+{nome:"Margherita", prezzo:7},
+{nome:"Marinara", prezzo:6},
+{nome:"Napoli", prezzo:8},
+{nome:"Romana", prezzo:8},
+{nome:"Prosciutto", prezzo:8.5},
+{nome:"Prosciutto e Funghi", prezzo:9},
+{nome:"Capricciosa", prezzo:10},
+{nome:"Quattro Stagioni", prezzo:10},
+{nome:"Quattro Formaggi", prezzo:10},
+{nome:"Diavola", prezzo:9},
+{nome:"Wurstel e Patatine", prezzo:9},
+{nome:"Tonno e Cipolla", prezzo:9.5},
+{nome:"Vegetariana", prezzo:9},
+{nome:"Ortolana", prezzo:9},
+{nome:"Siciliana", prezzo:10},
+{nome:"Calzone Classico", prezzo:9},
+
+{nome:"Bufalina", prezzo:11},
+{nome:"Parmigiana", prezzo:11},
+{nome:"Speck e Brie", prezzo:11},
+{nome:"Bresaola Rucola e Grana", prezzo:12},
+{nome:"Mortadella e Pistacchio", prezzo:12},
+{nome:"Salsiccia e Friarielli", prezzo:11},
+{nome:"Carbonara", prezzo:11},
+{nome:"Amatriciana", prezzo:11},
+{nome:"Gorgonzola e Noci", prezzo:11},
+{nome:"Funghi Porcini", prezzo:12},
+{nome:"Tartufo e Funghi", prezzo:14},
+
+{nome:"La Dolce Vita Special", prezzo:14},
+{nome:"Regina", prezzo:13},
+{nome:"Mediterranea", prezzo:13},
+{nome:"Mare e Monti", prezzo:14},
+{nome:"Tricolore", prezzo:12},
+{nome:"Chef Special", prezzo:15},
+{nome:"Tartufata", prezzo:15},
+
+{nome:"Bianca Semplice", prezzo:7},
+{nome:"Bianca Speck", prezzo:10},
+{nome:"Bianca Patate", prezzo:9},
+{nome:"Bianca Quattro Formaggi", prezzo:11},
+{nome:"Bianca Salmone", prezzo:13}
 ];
 
 
