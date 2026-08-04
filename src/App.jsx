@@ -44,14 +44,7 @@ const pizze = [
 {nome:"Bianca Quattro Formaggi", prezzo:11},
 {nome:"Bianca Salmone", prezzo:13}
 ];
-{pizzaScelta &&
 
-<div style={{
-marginTop:"20px",
-background:"#222",
-padding:"20px",
-borderRadius:"15px"
-}}>
 
 <h2>
 🍕 {pizzaScelta.nome}
