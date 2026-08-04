@@ -5,13 +5,21 @@ import { creaTavoli, pagamenti, statiAsporto } from "./dati";
 
 export default function App(){
 
+
 const [tavoli,setTavoli]=useState(creaTavoli());
 
 const [tavolo,setTavolo]=useState(null);
 
+
 const [categoria,setCategoria]=useState("pizze");
 
 const [ordine,setOrdine]=useState([]);
+
+
+const [persone,setPersone]=useState(0);
+
+const [cliente,setCliente]=useState("");
+
 
 const [extra,setExtra]=useState([]);
 
@@ -22,15 +30,14 @@ const [impasto,setImpasto]=useState("Classico");
 const [cottura,setCottura]=useState("Normale");
 
 
-const [persone,setPersone]=useState(0);
-
-const [cliente,setCliente]=useState("");
-
 
 const [cassa,setCassa]=useState(false);
 
 const [pagamento,setPagamento]=useState("");
 
+
+
+// ASporto
 
 const [asporto,setAsporto]=useState(false);
 
@@ -38,16 +45,13 @@ const [nomeAsporto,setNomeAsporto]=useState("");
 
 const [oraRitiro,setOraRitiro]=useState("");
 
-const [statoAsporto,setStatoAsporto]=useState(statiAsporto[0]);
-const [ordine,setOrdine]=useState([]);
-
 const [ordineAsporto,setOrdineAsporto]=useState([]);
 
 const [categoriaAsporto,setCategoriaAsporto]=useState("pizze");
 
-const [extra,setExtra]=useState([]);
+const [statoAsporto,setStatoAsporto]=useState(statiAsporto[0]);
 
-const [nota,setNota]=useState("");
+
 
 
 
@@ -87,30 +91,44 @@ setExtra([]);
 setNota("");
 
 }
-function aggiungiProdottoAsporto(p){
+
+
+
+function aggiungiAsporto(p){
 
 setOrdineAsporto([
 
 ...ordineAsporto,
 
-{
-...p
-}
+p
 
 ]);
 
 }
 
 
+
 function totale(){
 
 return ordine
+
 .reduce((a,b)=>a+b.prezzo,0)
+
 .toFixed(2);
 
 }
 
 
+
+function totaleAsporto(){
+
+return ordineAsporto
+
+.reduce((a,b)=>a+b.prezzo,0)
+
+.toFixed(2);
+
+}
 return (
 
 <div style={{
@@ -130,12 +148,15 @@ borderRadius:"10px"
 }}>
 🍕 La Dolce Vita POS
 </h1>
-{!tavolo &&
+
+
+
+{!tavolo && !asporto &&
 
 <div>
 
 <h2>
-🪑 Tavoli Sala
+🪑 Tavoli
 </h2>
 
 
@@ -155,12 +176,19 @@ key={t.numero}
 onClick={()=>apriTavolo(t)}
 
 style={{
+
 height:"90px",
-background:t.stato==="occupato"?"#d32f2f":"#2e7d32",
+
+background:t.stato==="occupato"
+?"#d32f2f"
+:"#2e7d32",
+
 color:"white",
+
 borderRadius:"15px",
-border:"2px solid white",
-fontWeight:"bold"
+
+border:"2px solid white"
+
 }}
 
 >
@@ -169,21 +197,34 @@ fontWeight:"bold"
 
 <br/>
 
-<small>
-{t.zona}
-</small>
+<small>{t.zona}</small>
 
 <br/>
 
-<small>
 👥 {t.persone || 0}
-</small>
 
 </button>
 
 )}
 
 </div>
+
+
+<button
+
+onClick={()=>setAsporto(true)}
+
+style={{
+marginTop:"20px",
+padding:"15px"
+}}
+
+>
+
+📦 Nuovo Asporto
+
+</button>
+
 
 </div>
 
@@ -201,13 +242,12 @@ fontWeight:"bold"
 </h2>
 
 
-<h3>
-{tavolo.zona}
-</h3>
+<h3>{tavolo.zona}</h3>
 
 
+
 <h3>
-👤 Nome prenotazione
+👤 Prenotazione
 </h3>
 
 
@@ -218,10 +258,6 @@ value={cliente}
 onChange={(e)=>setCliente(e.target.value)}
 
 placeholder="Nome cliente"
-
-style={{
-padding:"8px"
-}}
 
 />
 
@@ -236,24 +272,18 @@ padding:"8px"
 
 type="number"
 
-min="1"
-
 value={persone}
 
 onChange={(e)=>setPersone(e.target.value)}
 
-placeholder="Numero persone"
-
-style={{
-padding:"8px"
-}}
+min="1"
 
 />
 
 
 
 <h3>
-📋 Menu
+🍽️ Menu
 </h3>
 
 
@@ -264,7 +294,6 @@ value={categoria}
 onChange={(e)=>setCategoria(e.target.value)}
 
 >
-
 
 <option value="pizze">🍕 Pizze</option>
 
@@ -278,15 +307,11 @@ onChange={(e)=>setCategoria(e.target.value)}
 
 <option value="bimbi">🧒 Bimbi</option>
 
-
 </select>
 
 
 
-<div style={{
-marginTop:"15px"
-}}>
-
+<div>
 
 {menu[categoria].map(p=>
 
@@ -298,8 +323,7 @@ onClick={()=>aggiungiProdotto(p)}
 
 style={{
 margin:"5px",
-padding:"12px",
-borderRadius:"8px"
+padding:"12px"
 }}
 
 >
@@ -316,7 +340,7 @@ borderRadius:"8px"
 
 </div>  
 <h3>
-➕ Extra
+➕ Extra pizza
 </h3>
 
 
@@ -329,7 +353,8 @@ key={e.nome}
 onClick={()=>setExtra([...extra,e])}
 
 style={{
-margin:"5px"
+margin:"5px",
+padding:"8px"
 }}
 
 >
@@ -406,7 +431,7 @@ placeholder="Note cliente"
 
 
 <h2>
-Ordine
+📋 Ordine
 </h2>
 
 
@@ -423,7 +448,7 @@ Ordine
 
 
 <h2>
-Totale: €{totale()}
+Totale €{totale()}
 </h2>
 
 
@@ -450,23 +475,21 @@ marginLeft:"10px"
 
 >
 
-⬅ Tavoli
+⬅ Torna tavoli
 
 </button>
 
 
 </div>
 
-}
-
-
-
+}  
 {cassa &&
 
 <div style={{
 background:"#222",
 padding:"20px",
-marginTop:"20px"
+marginTop:"20px",
+borderRadius:"15px"
 }}>
 
 
@@ -478,7 +501,6 @@ marginTop:"20px"
 <h3>
 Totale €{totale()}
 </h3>
-
 
 
 {pagamenti.map(p=>
@@ -559,17 +581,21 @@ setCassa(false);
 
 
 
+
 {asporto &&
 
 <div style={{
 background:"#333",
-padding:"20px"
+padding:"20px",
+marginTop:"20px",
+borderRadius:"15px"
 }}>
 
 
 <h2>
 📦 Asporto
 </h2>
+
 
 
 <input
@@ -599,7 +625,91 @@ onChange={(e)=>setOraRitiro(e.target.value)}
 
 
 <h3>
-Stato
+🍽️ Menu asporto
+</h3>
+
+
+<select
+
+value={categoriaAsporto}
+
+onChange={(e)=>setCategoriaAsporto(e.target.value)}
+
+>
+
+<option value="pizze">🍕 Pizze</option>
+
+<option value="bevande">🥤 Bevande</option>
+
+<option value="caffetteria">☕ Caffè</option>
+
+<option value="dolci">🍰 Dolci</option>
+
+<option value="gelati">🍦 Gelati</option>
+
+<option value="bimbi">🧒 Bimbi</option>
+
+</select>
+
+
+
+<div>
+
+
+{menu[categoriaAsporto].map(p=>
+
+<button
+
+key={p.nome}
+
+onClick={()=>aggiungiAsporto(p)}
+
+style={{
+margin:"5px",
+padding:"12px"
+}}
+
+>
+
+{p.nome}
+
+<br/>
+
+€{p.prezzo}
+
+</button>
+
+)}
+
+</div>
+
+
+
+<h3>
+📋 Ordine asporto
+</h3>
+
+
+{ordineAsporto.map((o,i)=>
+
+<p key={i}>
+
+{o.nome} €{o.prezzo}
+
+</p>
+
+)}
+
+
+
+<h2>
+Totale €{totaleAsporto()}
+</h2>
+
+
+
+<h3>
+Stato ordine
 </h3>
 
 
@@ -622,26 +732,33 @@ onChange={(e)=>setStatoAsporto(e.target.value)}
 </select>
 
 
-</div>
-
-}
-
-
 
 <button
 
-onClick={()=>setAsporto(true)}
+onClick={()=>{
+
+setAsporto(false);
+
+setOrdineAsporto([]);
+
+}}
 
 style={{
-marginTop:"20px",
+marginTop:"15px",
 padding:"12px"
 }}
 
 >
 
-📦 Nuovo Asporto
+✅ Salva asporto
 
 </button>
+
+
+</div>
+
+}
+
 
 
 </div>
