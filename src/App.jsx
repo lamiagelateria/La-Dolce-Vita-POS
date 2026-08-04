@@ -87,7 +87,19 @@ setExtra([]);
 setNota("");
 
 }
+function aggiungiProdottoAsporto(p){
 
+setOrdineAsporto([
+
+...ordineAsporto,
+
+{
+...p
+}
+
+]);
+
+}
 
 
 function totale(){
