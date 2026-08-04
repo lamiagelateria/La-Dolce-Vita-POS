@@ -963,7 +963,122 @@ width:"90%"
 />
 
 
+{pizzaModifica &&
 
+<div style={{
+background:"#333",
+padding:"20px",
+borderRadius:"15px",
+marginTop:"20px"
+}}>
+
+<h2>
+🍕 Modifica {pizzaModifica.nome}
+</h2>
+
+
+<h3>
+Togli ingredienti
+</h3>
+
+
+{pizzaModifica.ingredienti.map(i=>
+
+<button
+
+key={i}
+
+onClick={()=>togliIngrediente(i)}
+
+style={{
+
+margin:"5px",
+
+padding:"10px",
+
+background:
+
+senza.includes(i)
+
+?
+
+"#b71c1c"
+
+:
+
+"#444",
+
+color:"white"
+
+}}
+
+>
+
+{i}
+
+</button>
+
+)}
+
+
+
+<h3>
+Aggiungi ingredienti
+</h3>
+
+
+{menu.extra.map(e=>
+
+<button
+
+key={e.nome}
+
+onClick={()=>aggiungiIngrediente(e)}
+
+style={{
+
+margin:"5px",
+
+padding:"10px"
+
+}}
+
+>
+
++ {e.nome} €{e.prezzo}
+
+</button>
+
+)}
+
+
+
+<button
+
+onClick={confermaPizza}
+
+style={{
+
+marginTop:"20px",
+
+padding:"15px",
+
+background:"#2e7d32",
+
+color:"white"
+
+}}
+
+>
+
+✅ Conferma pizza
+
+</button>
+
+
+</div>
+
+}
 <h2>
 📋 Ordine
 </h2>
