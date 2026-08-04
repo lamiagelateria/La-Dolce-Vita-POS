@@ -60,7 +60,6 @@ borderRadius:"15px"
 <h3>
 Extra ingredienti
 </h3>
-
 {ingredienti.map(i=>(
 
 <button
@@ -70,6 +69,7 @@ style={{
 margin:"5px",
 padding:"10px"
 }}
+
 >
 ➕ {i}
 </button>
@@ -116,7 +116,16 @@ const ingredienti = [
 "🌭 Wurstel",
 "🌶️ Salame piccante"
 ];
-
+const extraIngredienti = [
+  {nome:"Funghi", prezzo:1},
+  {nome:"Prosciutto", prezzo:2},
+  {nome:"Olive", prezzo:1},
+  {nome:"Patatine", prezzo:1.5},
+  {nome:"Mozzarella extra", prezzo:2},
+  {nome:"Salame piccante", prezzo:1.5},
+  {nome:"Burrata", prezzo:3},
+  {nome:"Pistacchio", prezzo:2.5}
+];
 export default function App(){
 
 const [tavoli,setTavoli]=useState(
@@ -131,6 +140,7 @@ const [tavoloAperto,setTavoloAperto]=useState(null);
 const [pizzaScelta,setPizzaScelta]=useState(null);
 const [nota,setNota]=useState("");
 const [extra,setExtra]=useState([]);
+const [prezzoExtra,setPrezzoExtra]=useState(0);
 
 function apriTavolo(t){
 setTavoloAperto(t);
