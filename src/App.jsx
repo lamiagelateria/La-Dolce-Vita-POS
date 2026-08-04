@@ -34,7 +34,6 @@ const [oraRitiro,setOraRitiro]=useState("");
 const [statoAsporto,setStatoAsporto]=useState(statiAsporto[0]);
 
 
-
 function apriTavolo(t){
 
 setTavolo(t);
@@ -44,13 +43,10 @@ setOrdine(t.ordine);
 }
 
 
-
 function aggiungiProdotto(p){
 
 setOrdine([
-
 ...ordine,
-
 {
 ...p,
 extra,
@@ -58,16 +54,13 @@ nota,
 impasto,
 cottura
 }
-
 ]);
-
 
 setExtra([]);
 
 setNota("");
 
 }
-
 
 
 function totale(){
@@ -77,7 +70,9 @@ return ordine
 .toFixed(2);
 
 }
-  return (
+
+
+return (
 
 <div style={{
 background:"#111",
@@ -91,40 +86,54 @@ padding:"20px"
 <h1 style={{
 background:"#b71c1c",
 padding:"20px",
-textAlign:"center"
+textAlign:"center",
+borderRadius:"10px"
 }}>
 🍕 La Dolce Vita POS
 </h1>
-
-
-
-{!tavolo &&
+  {!tavolo &&
 
 <div>
 
-<h2>🪑 Tavoli</h2>
+<h2>
+🪑 Sala Ristorante
+</h2>
+
 
 <div style={{
 display:"grid",
 gridTemplateColumns:"repeat(6,1fr)",
-gap:"10px"
+gap:"15px"
 }}>
 
 
 {tavoli.map(t=>
 
 <button
+
 key={t.numero}
+
 onClick={()=>apriTavolo(t)}
+
 style={{
-height:"70px",
-background:t.stato==="occupato"?"red":"green",
+height:"90px",
+background:t.stato==="occupato"?"#d32f2f":"#2e7d32",
 color:"white",
-borderRadius:"10px"
+borderRadius:"15px",
+border:"2px solid white",
+fontWeight:"bold"
 }}
+
 >
 
-Tavolo {t.numero}
+🪑 Tavolo {t.numero}
+
+<br/>
+
+<small>
+{t.zona}
+</small>
+
 
 </button>
 
@@ -148,41 +157,56 @@ Tavolo {t.numero}
 🪑 Tavolo {tavolo.numero}
 </h2>
 
+<h3>
+{tavolo.zona}
+</h3>
 
-<h3>Menu</h3>
 
 
 <select
+
 value={categoria}
+
 onChange={(e)=>setCategoria(e.target.value)}
+
 >
 
 <option value="pizze">🍕 Pizze</option>
 <option value="bevande">🥤 Bevande</option>
-<option value="caffetteria">☕ Caffetteria</option>
+<option value="caffetteria">☕ Caffè</option>
 <option value="dolci">🍰 Dolci</option>
 <option value="gelati">🍦 Gelati</option>
-<option value="bimbi">🧒 Menù bimbi</option>
+<option value="bimbi">🧒 Bimbi</option>
 
 </select>
 
 
 
-<div>
+<div style={{
+marginTop:"15px"
+}}>
+
 
 {menu[categoria].map(p=>
 
 <button
+
 key={p.nome}
+
 onClick={()=>aggiungiProdotto(p)}
+
 style={{
 margin:"5px",
-padding:"12px"
+padding:"12px",
+borderRadius:"8px"
 }}
+
 >
 
 {p.nome}
+
 <br/>
+
 €{p.prezzo}
 
 </button>
@@ -193,16 +217,23 @@ padding:"12px"
 
 
 
-<h3>➕ Extra pizza</h3>
+<h3>
+➕ Extra
+</h3>
+
 
 {menu.extra.map(e=>
 
 <button
+
 key={e.nome}
+
 onClick={()=>setExtra([...extra,e])}
+
 style={{
 margin:"5px"
 }}
+
 >
 
 {e.nome} +€{e.prezzo}
@@ -213,7 +244,10 @@ margin:"5px"
 
 
 
-<h3>🍞 Impasto</h3>
+<h3>
+🍞 Impasto
+</h3>
+
 
 <select
 value={impasto}
@@ -228,7 +262,10 @@ onChange={(e)=>setImpasto(e.target.value)}
 
 
 
-<h3>🔥 Cottura</h3>
+<h3>
+🔥 Cottura
+</h3>
+
 
 <select
 value={cottura}
@@ -243,30 +280,38 @@ onChange={(e)=>setCottura(e.target.value)}
 
 
 
-<h3>📝 Nota</h3>
+<h3>
+📝 Nota
+</h3>
+
 
 <textarea
+
 value={nota}
+
 onChange={(e)=>setNota(e.target.value)}
+
 placeholder="Note cliente"
+
 />
 
 
+<h2>
+Ordine
+</h2>
 
-<h2>Ordine</h2>
 
 {ordine.map((o,i)=>
 
 <p key={i}>
-{o.nome} - €{o.prezzo}
+{o.nome} €{o.prezzo}
 </p>
 
 )}
 
 
-
 <h2>
-Totale: €{totale()}
+Totale €{totale()}
 </h2>
 
 
@@ -274,7 +319,7 @@ Totale: €{totale()}
 <button
 onClick={()=>setCassa(true)}
 >
-💳 Vai alla cassa
+💳 Cassa
 </button>
 
 
@@ -302,21 +347,24 @@ borderRadius:"15px"
 💳 Cassa
 </h2>
 
-
 <h3>
-Totale conto: €{totale()}
+Totale: €{totale()}
 </h3>
 
 
 {pagamenti.map(p=>
 
 <button
+
 key={p}
+
 onClick={()=>setPagamento(p)}
+
 style={{
 margin:"5px",
 padding:"10px"
 }}
+
 >
 
 {p}
@@ -326,40 +374,54 @@ padding:"10px"
 )}
 
 
+
 {pagamento &&
 
 <div>
 
-<h3>
-Pagamento scelto: {pagamento}
-</h3>
+<p>
+Pagamento: {pagamento}
+</p>
 
 
 <button
+
 onClick={()=>{
 
 setTavoli(
+
 tavoli.map(t=>
+
 t.numero===tavolo.numero
+
 ?
+
 {
 ...t,
 stato:"libero",
 ordine:[],
 totale:0
 }
+
 :t
+
 )
+
 );
+
 
 setTavolo(null);
 setOrdine([]);
 setPagamento("");
 setCassa(false);
 
+
 }}
+
 >
+
 ✅ Chiudi conto
+
 </button>
 
 
@@ -367,11 +429,9 @@ setCassa(false);
 
 }
 
-
 </div>
 
 }
-
 
 
 
@@ -384,15 +444,20 @@ padding:"20px",
 marginTop:"20px"
 }}>
 
+
 <h2>
 📦 Asporto
 </h2>
 
 
 <input
+
 placeholder="Nome cliente"
+
 value={cliente}
+
 onChange={(e)=>setCliente(e.target.value)}
+
 />
 
 
@@ -400,21 +465,28 @@ onChange={(e)=>setCliente(e.target.value)}
 
 
 <input
+
 placeholder="Ora ritiro"
+
 value={oraRitiro}
+
 onChange={(e)=>setOraRitiro(e.target.value)}
+
 />
 
 
 
 <h3>
-Stato:
+Stato ordine
 </h3>
 
 
 <select
+
 value={statoAsporto}
+
 onChange={(e)=>setStatoAsporto(e.target.value)}
+
 >
 
 {statiAsporto.map(s=>
@@ -434,13 +506,20 @@ onChange={(e)=>setStatoAsporto(e.target.value)}
 
 
 
+
 <button
+
 onClick={()=>setAsporto(true)}
+
 style={{
-marginTop:"20px"
+marginTop:"20px",
+padding:"12px"
 }}
+
 >
-📦 Nuovo asporto
+
+📦 Nuovo Asporto
+
 </button>
 
 
@@ -449,4 +528,4 @@ marginTop:"20px"
 
 );
 
-}
+}  
