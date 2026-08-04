@@ -1,22 +1,32 @@
 export const creaTavoli = () => {
 
-const zone=[
+const zone = [
 "🍽️ Sala A",
 "🍽️ Sala B",
 "🌳 Esterno"
 ];
 
+
 return Array.from({length:120},(_,i)=>({
 
 numero:i+1,
+
 zona:zone[i%3],
+
 stato:"libero",
+
 ordine:[],
-totale:0
-persone:0
+
+totale:0,
+
+persone:0,
+
+cliente:""
+
 }));
 
 };
+
 
 
 export const pagamenti = [
@@ -27,6 +37,7 @@ export const pagamenti = [
 "Satispay"
 
 ];
+
 
 
 export const statiAsporto = [
