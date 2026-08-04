@@ -44,7 +44,15 @@ const pizze = [
 {nome:"Bianca Quattro Formaggi", prezzo:11},
 {nome:"Bianca Salmone", prezzo:13}
 ];
-
+const extraIngredienti = [
+ {nome:"Funghi", prezzo:1},
+ {nome:"Prosciutto", prezzo:2},
+ {nome:"Olive", prezzo:1},
+ {nome:"Patatine", prezzo:1.5},
+ {nome:"Mozzarella extra", prezzo:2},
+ {nome:"Burrata", prezzo:3},
+ {nome:"Pistacchio", prezzo:2.5}
+];
 
 <h2>
 🍕 {pizzaScelta.nome}
@@ -131,10 +139,9 @@ ordine:[]
 
 const [tavoloAperto,setTavoloAperto]=useState(null);
 const [pizzaScelta,setPizzaScelta]=useState(null);
-const [nota,setNota]=useState("");
 const [extra,setExtra]=useState([]);
+const [nota,setNota]=useState("");
 const [prezzoExtra,setPrezzoExtra]=useState(0);
-
 function apriTavolo(t){
 setTavoloAperto(t);
 }
