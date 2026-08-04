@@ -44,7 +44,17 @@ const pizze = [
 {nome:"Bianca Quattro Formaggi", prezzo:11},
 {nome:"Bianca Salmone", prezzo:13}
 ];
-
+const ingredienti = [
+"🍅 Pomodoro",
+"🧀 Mozzarella",
+"🌿 Basilico",
+"🍄 Funghi",
+"🥓 Prosciutto",
+"🌶️ Peperoni",
+"🫒 Olive",
+"🌭 Wurstel",
+"🌶️ Salame piccante"
+];
 
 export default function App(){
 
